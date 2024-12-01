@@ -32,16 +32,24 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install black isort
-
-      - name: Apply isort and black
+      - name: Run isort (sort imports with black profile)
         run: |
           isort . --profile black
+
+      - name: Run black (format code)
+        run: |
           black .
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add .
-          git diff --quiet || (
-            git commit -m "Apply Black and isort formatting"
+
+      - name: Check if black made changes and commit if needed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Check for changes
+          git diff --exit-code || (
+            git config --global user.name "GitHub Actions" &&
+            git config --global user.email "actions@github.com" &&
+            git add . &&
+            git commit -m "Apply black formatting" &&
             git push origin HEAD
           )
 
