@@ -19,8 +19,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref || github.ref }}
           fetch-depth: 0
-          persist-credentials: true
+          persist-credentials: true  # Allow pushing changes back
 
       - name: Set up Python
         uses: actions/setup-python@v4
