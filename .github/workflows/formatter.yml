@@ -1,0 +1,44 @@
+name: format_code
+
+on:
+  push:
+    branches:
+      - "*"  # Runs on all branches to auto-format code
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black isort
+
+      - name: Apply isort and black
+        run: |
+          isort . --profile black
+          black .
+          
+          # Commit and push changes if any were made
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git diff --quiet || (
+            git commit -m "Apply Black and isort formatting"
+            git push origin HEAD
+          )
