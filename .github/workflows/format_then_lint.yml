@@ -9,7 +9,7 @@ on:
       - "main"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   format:
@@ -19,7 +19,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
+          persist-credentials: true
 
       - name: Set up Python
         uses: actions/setup-python@v4
