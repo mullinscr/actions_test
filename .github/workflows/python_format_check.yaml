@@ -42,6 +42,11 @@ jobs:
         run: |
           black .  # Automatically format the code
 
+      - name: Check if black made changes and commit if needed
+        run: |
+          git diff --exit-code || (git config --global user.name "GitHub Actions" && git config --global user.email "actions@github.com" && git add . && git commit -m "Apply black formatting" && git push)
+        # This step checks for changes and commits them back if necessary
+
       - name: Run flake8 (check code)
         run: |
           flake8 .  --max-line-length=88 --extend-ignore = E203,E701 # Lint the code and report issues
