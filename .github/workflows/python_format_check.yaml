@@ -3,10 +3,10 @@ name: sort_black_lint
 on:
   push:
     branches:
-      - "*" # Run on all branches
+      - "*"  # Run on all branches
   pull_request:
     branches:
-      - "*" # Run on all branches
+      - "*"  # Run on all pull requests
   workflow_dispatch:
 
 permissions:
@@ -20,8 +20,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Ensure full history is fetched
-          ref: ${{ github.ref }}
+          # Automatically resolve the correct branch for pull requests and pushes
+          ref: ${{ github.head_ref || github.ref }}
+          fetch-depth: 0
+          persist-credentials: true  # Allow pushing changes back
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -45,12 +47,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Check for changes
           git diff --exit-code || (
             git config --global user.name "GitHub Actions" &&
             git config --global user.email "actions@github.com" &&
             git add . &&
             git commit -m "Apply black formatting" &&
-            git push origin "${{ github.ref_name }}"
+            git push origin HEAD
           )
 
       - name: Run flake8 (check code)
