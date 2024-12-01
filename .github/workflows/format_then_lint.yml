@@ -1,4 +1,4 @@
-name: lint_code
+name: format_then_lint_code
 
 on:
   push:
