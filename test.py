@@ -1,11 +1,7 @@
 """This code is bad on purpose!"""
 
+from collections import defaultdict
 from pathlib import Path
-from collections import defaultdict   
 
-for file in Path('.').iterdir():
+for file in Path(".").iterdir():
     print(file.stem)
-
-
-
-    
