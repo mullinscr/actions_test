@@ -44,4 +44,4 @@ jobs:
 
       - name: Run flake8 (check code)
         run: |
-          flake8 .  # Lint the code and report issues
+          flake8 .  --max-line-length=88 --extend-ignore = E203,E701 # Lint the code and report issues
