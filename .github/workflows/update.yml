@@ -1,0 +1,28 @@
+name: Update Placeholder
+
+on:
+  workflow_dispatch:  # Allows the workflow to be triggered manually on default branch (main for us)
+    inputs:
+      commitToBuild:
+        description: 'Commit SHA1 to build'
+        required: true
+        type: string
+jobs:
+  update-placeholder:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.commitToBuild }}
+
+      - name: Get the last commit short hash
+        id: get_commit_hash
+        run: echo "SHORT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4 # as of v4.4 hidden files are excluded by default
+        with:
+          name: test
+          path: .
