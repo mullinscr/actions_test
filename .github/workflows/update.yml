@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: b687531009034ac72d59a974be09fd46d29512b4
+          ref: ${{ github.event.inputs.commitToBuild }}
 
       - name: Get the last commit short hash
         id: get_commit_hash
