@@ -1,4 +1,4 @@
-name: Update Placeholder
+name: Build from commit $(echo '${{ github.event.inputs.commitToBuild }}' | cut -c1-7)
 
 on:
   workflow_dispatch:  # Allows the workflow to be triggered manually on default branch (main for us)
